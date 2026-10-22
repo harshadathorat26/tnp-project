@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}Placement Applications{% endblock title %}
+
+{% block body %}
+
+<div class="container mt-5 mb-5">
+
+    <div class="mb-4">
+        <h2>Placement Applications</h2>
+        <p class="text-muted">
+            Explore placement opportunities and track your applications.
+        </p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Available Placement Drives -->
+
+    <h4 class="mb-3">Available Placement Drives</h4>
+
+    <div class="row">
+
+        {% for drive in drives %}
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+
+                    <h5 class="card-title">
+                        {{ drive.company_name }}
+                    </h5>
+
+                    <h6 class="text-primary mb-3">
+                        {{ drive.job_role }}
+                    </h6>
+
+                    <p>
+                        <strong>Package:</strong>
+                        {{ drive.package }}
+                    </p>
+
+                    <p>
+                        <strong>Eligibility:</strong>
+                        {{ drive.eligibility }}
+                    </p>
+
+                    <p>
+                        <strong>Deadline:</strong>
+                        {{ drive.deadline|date:"d M Y" }}
+                    </p>
+
+                    {% if drive.description %}
+                        <div class="mt-3">
+                            <h6 class="fw-bold">
+                                <i class="bi bi-briefcase"></i> Job Description
+                            </h6>
+
+                            <div class="text-muted small"
+                                style="white-space: pre-line; line-height: 1.8;">
+                                {{ drive.description }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="mt-auto pt-3">
+                    {% if drive.id in applied_drive_ids %}
+                        <button class="btn btn-secondary w-100" disabled>
+                            Already Applied
+                        </button>
+                    {% else %}
+                        <form method="POST" action="{% url 'apply_for_drive' drive.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary w-100">
+                                Apply Now
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="col-12">
+            <div class="alert alert-info">
+                No active placement drives are available right now.
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <hr class="my-5">
+
+    <!-- My Applications -->
+
+    <h4 class="mb-3">My Applications</h4>
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Company</th>
+                    <th>Job Role</th>
+                    <th>Applied On</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for application in my_applications %}
+
+                <tr>
+                    <td>{{ application.drive.company_name }}</td>
+
+                    <td>{{ application.drive.job_role }}</td>
+
+                    <td>
+                        {{ application.applied_at|date:"d M Y" }}
+                    </td>
+
+                    <td>
+
+                        {% if application.status == 'Selected' %}
+                            <span class="badge bg-success">
+                                {{ application.status }}
+                            </span>
+
+                        {% elif application.status == 'Rejected' %}
+                            <span class="badge bg-danger">
+                                {{ application.status }}
+                            </span>
+
+                        {% elif application.status == 'Shortlisted' %}
+                            <span class="badge bg-info text-dark">
+                                {{ application.status }}
+                            </span>
+
+                        {% else %}
+                            <span class="badge bg-secondary">
+                                {{ application.status }}
+                            </span>
+                        {% endif %}
+
+                    </td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        You haven't applied for any placement drives yet.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock body %}
+

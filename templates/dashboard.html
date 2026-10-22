@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard{% endblock title %}
+
+{% block body %}
+
+<div class="container py-5">
+
+
+<!-- Welcome Section -->
+<div class="p-4 p-md-5 mb-4 rounded-4 text-white shadow"
+     style="background: linear-gradient(135deg, #0d6efd, #3d5afe);">
+
+    <h2 class="fw-bold">
+        Welcome, {{ request.user.first_name|default:request.user.username }}!
+    </h2>
+
+    <p class="mb-0">
+        Your Student Placement Dashboard
+    </p>
+
+    <p class="mt-2 mb-0">
+        Track placement opportunities, manage your applications,
+        and stay updated with announcements.
+    </p>
+</div>
+
+<!-- Summary Cards -->
+<div class="row g-4 mb-5">
+
+    <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <p class="text-muted mb-2">Available Drives</p>
+                <h2 class="fw-bold text-primary">{{ total_drives }}</h2>
+                <a href="{% url 'application' %}"
+                   class="text-decoration-none">Explore drives →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <p class="text-muted mb-2">Applications Submitted</p>
+                <h2 class="fw-bold text-success">{{ total_applications }}</h2>
+                <a href="{% url 'application' %}"
+                   class="text-decoration-none">View applications →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <p class="text-muted mb-2">Shortlisted</p>
+                <h2 class="fw-bold text-warning">{{ shortlisted }}</h2>
+                <a href="{% url 'application' %}"
+                   class="text-decoration-none">Check status →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <p class="text-muted mb-2">Notifications</p>
+                <h2 class="fw-bold text-info">{{ total_notifications }}</h2>
+                <a href="{% url 'notification' %}"
+                   class="text-decoration-none">View notifications →</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Quick Access -->
+<h4 class="fw-bold mb-3">Quick Access</h4>
+
+<div class="row g-3 mb-5">
+
+    <div class="col-md-3">
+        <a href="{% url 'profile' %}"
+           class="btn btn-outline-primary w-100 p-3">
+            My Profile
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'resume' %}"
+           class="btn btn-outline-primary w-100 p-3">
+            My Resume
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'application' %}"
+           class="btn btn-outline-primary w-100 p-3">
+            Applications
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'notification' %}"
+           class="btn btn-outline-primary w-100 p-3">
+            Notifications
+        </a>
+    </div>
+
+</div>
+
+<!-- Recent Placement Drives -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold mb-0">Upcoming Placement Drives</h4>
+
+    <a href="{% url 'application' %}"
+       class="btn btn-sm btn-primary">View All</a>
+</div>
+
+<div class="row g-4 mb-5">
+
+    {% for drive in recent_drives %}
+
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold">{{ drive.company_name }}</h5>
+
+                <p class="text-primary mb-2">{{ drive.job_role }}</p>
+
+                <p class="mb-2">
+                    <strong>Package:</strong> {{ drive.package }}
+                </p>
+
+                <p class="text-muted small">
+                    Deadline: {{ drive.deadline|date:"d M Y" }}
+                </p>
+
+                <a href="{% url 'application' %}"
+                   class="btn btn-primary w-100">
+                    View Details
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    {% empty %}
+
+    <div class="col-12">
+        <div class="alert alert-info">
+            No upcoming placement drives are available.
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- Latest Notifications -->
+<h4 class="fw-bold mb-3">Latest Notifications 🔔</h4>
+
+{% for notification in recent_notifications %}
+
+<div class="card border-0 shadow-sm mb-3">
+    <div class="card-body p-3">
+
+        <h6 class="fw-bold mb-2">{{ notification.title }}</h6>
+
+        <p class="text-muted mb-2"
+           style="white-space: pre-line;">
+            {{ notification.message|truncatechars:180 }}
+        </p>
+
+        <small class="text-secondary">
+            {{ notification.date|date:"d M Y, h:i A" }}
+        </small>
+
+    </div>
+</div>
+
+{% empty %}
+
+<div class="alert alert-light border">
+    No new announcements at the moment.
+</div>
+
+{% endfor %}
+
+<div class="text-end mt-3">
+    <a href="{% url 'notification' %}"
+       class="btn btn-outline-primary">
+        View All Notifications
+    </a>
+</div>
+
+
+</div>
+
+{% endblock body %}

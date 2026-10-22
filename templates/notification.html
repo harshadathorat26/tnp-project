@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications{% endblock title %}
+
+{% block body %}
+
+<div class="container py-5">
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold">Notifications 🔔</h2>
+        <p class="text-muted">Stay updated with placement announcements.</p>
+    </div>
+</div>
+
+{% for notification in notifications %}
+
+<div class="card shadow-sm mb-3 border-0">
+    <div class="card-body p-4">
+
+        <div class="d-flex justify-content-between align-items-start">
+            <h5 class="fw-bold mb-2">{{ notification.title }}</h5>
+
+            <span class="badge bg-primary">New</span>
+        </div>
+
+        <p class="text-muted mb-3"
+           style="white-space: pre-line; line-height: 1.7;">
+            {{ notification.message }}
+        </p>
+
+        <small class="text-secondary">
+            📅 {{ notification.date|date:"d M Y, h:i A" }}
+        </small>
+
+    </div>
+</div>
+
+{% empty %}
+
+<div class="card border-0 shadow-sm text-center p-5">
+    <h5>No notifications yet</h5>
+    <p class="text-muted mb-0">
+        Placement announcements will appear here.
+    </p>
+</div>
+
+{% endfor %}
+
+
+</div>
+
+{% endblock body %}

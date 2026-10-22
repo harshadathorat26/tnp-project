@@ -1,0 +1,171 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block body %}
+
+<div class="container py-5">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Student Profile</h2>
+        <p class="text-muted">
+            Manage your personal, academic and technical details.
+        </p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <div class="text-center mb-4">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+                     style="width:90px;height:90px;font-size:32px;">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <h4 class="fw-bold">{{ request.user.username }}</h4>
+                <p class="text-muted">MCA Student</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h5 class="text-primary mb-3">Personal Details</h5>
+
+                <div class="row g-3 mb-4">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="full_name"
+                               class="form-control"
+                               value="{{ student.full_name }}"
+                               placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" name="email"
+                               class="form-control"
+                               value="{{ student.email }}"
+                               placeholder="Enter your email">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" name="phone"
+                               class="form-control"
+                               value="{{ student.phone }}"
+                               placeholder="Enter your phone number">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Course</label>
+                        <input type="text" name="course"
+                               class="form-control"
+                               value="{{ student.course|default:'Master of Computer Applications' }}">
+                    </div>
+
+                </div>
+
+                <h5 class="text-primary mb-3">Academic Details</h5>
+
+                <div class="row g-3 mb-4">
+
+                    <div class="col-md-6">
+                        <label class="form-label">College</label>
+                        <input type="text" name="college"
+                               class="form-control"
+                               value="{{ student.college|default:'PCCOE' }}"
+                               placeholder="Enter college name">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Previous Degree</label>
+                        <input type="text" name="previous_degree"
+                               class="form-control"
+                               value="{{ student.previous_degree }}"
+                               placeholder="e.g. BCA">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Graduation Percentage</label>
+                        <input type="number" name="graduation_percentage"
+                               step="0.01" min="0" max="100"
+                               class="form-control"
+                               value="{{ student.graduation_percentage }}"
+                               placeholder="e.g. 86.73">
+                    </div>
+
+                </div>
+
+                <h5 class="text-primary mb-3">Technical Skills</h5>
+
+                <div class="mb-4">
+                    <label class="form-label">Skills</label>
+                    <textarea name="skills" class="form-control" rows="3"
+                              placeholder="e.g. Python, Java, SQL, HTML, CSS">{{ student.skills }}</textarea>
+                </div>
+
+                <h5 class="text-primary mb-3">Coding Profiles</h5>
+
+                <div class="row g-3 mb-4">
+
+                    <div class="col-md-6">
+                        <label class="form-label">GitHub Profile</label>
+                        <input type="url" name="github"
+                               class="form-control"
+                               value="{{ student.github }}"
+                               placeholder="https://github.com/username">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">LinkedIn Profile</label>
+                        <input type="url" name="linkedin"
+                               class="form-control"
+                               value="{{ student.linkedin }}"
+                               placeholder="https://linkedin.com/in/username">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">HackerRank Profile</label>
+                        <input type="url" name="hackerrank"
+                               class="form-control"
+                               value="{{ student.hackerrank }}"
+                               placeholder="HackerRank profile URL">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">CodeChef Profile</label>
+                        <input type="url" name="codechef"
+                               class="form-control"
+                               value="{{ student.codechef }}"
+                               placeholder="CodeChef profile URL">
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-outline-secondary">
+                        Reset
+                    </button>
+
+                    <button type="submit" class="btn btn-primary">
+                        Save Profile
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock body %}
+

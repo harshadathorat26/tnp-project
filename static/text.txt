@@ -1,0 +1,4 @@
+heyy this is a text file in static
+#this is a trial file 
+#do not add sensitive data to static file ever 
+#only add the data which is publically available.
